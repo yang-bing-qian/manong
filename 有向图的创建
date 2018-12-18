@@ -1,0 +1,88 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define Max 20
+typedef struct arcnode
+{
+	int tailvex,headvex;
+	struct arcnode *hnext,*tnext ;
+} arcnode;
+typedef struct vertexnode
+{
+	char data;
+	arcnode *head ,*tali;
+}vertexnode;
+typedef struct 
+{
+	vertexnode vertex[Max];
+	int vex;
+	int arc;
+}Orthlist;
+Orthlist G;
+int  select(char a)
+{
+	for(int i=0;i<=G.vex;i++)
+	{
+		if(a==G.vertex[i].data)
+		return i;
+	}
+	return -1;
+}
+void chushihua()
+{
+	for(int i=1;i<=G.vex;i++)
+	{
+		G.vertex[i].head=NULL;
+		G.vertex[i].tali=NULL;
+	} 
+}
+arcnode *zhao(arcnode *p,int a)
+{
+	if(a==0)
+	while(p->hnext!=NULL)
+		p=p->hnext;
+	else
+	while(p->tnext!=NULL)
+		p=p->tnext;
+	return p;
+}
+void creat()
+{
+	int i,a,b;
+	char d[2];
+	scanf("%d %d",&G.vex,&G.arc);
+	for(i=0;i<=G.vex;i++)
+		scanf("%c",&G.vertex[i].data);
+	chushihua();
+	for(i=0;i<G.arc;i++)
+	{
+
+		for(a=0;a<2;a++)
+			scanf("\n%c",&d[a]); 
+		arcnode *p,*q=(arcnode*)malloc(sizeof(arcnode));
+		q->headvex=select(d[0]);
+		q->tailvex=select(d[1]);
+		q->hnext=q->tnext=NULL;
+		if(G.vertex[q->headvex].head==NULL)
+			G.vertex[q->headvex].head=q;
+		else
+		{
+			p=G.vertex[q->headvex].head;
+			p=zhao(p,0);
+			p->hnext=(arcnode*)malloc(sizeof(arcnode));
+			p->hnext=q; 
+		}
+		if(G.vertex[q->tailvex].tali==NULL)
+			G.vertex[q->tailvex].tali=q;
+		else
+		{
+			p=G.vertex[q->tailvex].tali;
+			p=zhao(p,1);
+			p->tnext=(arcnode*)malloc(sizeof(arcnode));
+			p->tnext=q;
+		}
+	}
+}
+int main()
+{
+	creat();
+} 
